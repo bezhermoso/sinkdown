@@ -14,6 +14,13 @@ module Sinkdown
       @listeners << listener
     end
 
+    def remove_listener(listener)
+      index = @listeners.find_index listener
+      if index
+        @listeners.delete_at index
+      end
+    end
+
     def start(site)
       site_path = Pathname.new site.config[:sinkdown_dir]
       glob = File.join(site.config[:sinkdown_dir], '**/*.html')
@@ -22,7 +29,6 @@ module Sinkdown
         w.watch do |file|
           file_path = Pathname.new file
           url = "/#{file_path.relative_path_from(site_path)}"
-          puts "Edited: " + url
           doc_event = Hash.new
           document = site.find_document_by_url url
           doc_event[:document] = document

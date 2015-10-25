@@ -8,6 +8,7 @@ module Sinkdown
       def initialize(app = nil, options = nil)
         @app = app
         @site = options[:site]
+        @listeners = Hash.new
       end
 
       def call(env)
@@ -15,13 +16,23 @@ module Sinkdown
           ws = Faye::WebSocket.new env
           ws.on :open do |event|
             listener = lambda do |doc_event|
-              puts doc_event
-              msg = {
-                "document" => doc_event[:document].to_json
-              }
-              ws.send msg.to_json
+              if ws
+                msg = {
+                  "document" => doc_event[:document].to_json
+                }
+                ws.send msg.to_json
+              end
             end
+            @listeners[ws] = listener
             @site.watcher << listener
+          end
+          ws.on :close do |event|
+            listener = @listeners[ws]
+            if listener
+              @site.watcher.remove_listener listener
+            end
+            @listeners.delete(ws)
+            ws = nil
           end
           ws.rack_response
         else
