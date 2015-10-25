@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'sinkdown'
+rescue
+  require 'rubygems'
+  require 'sinkdown'
+end
+
+require 'optparse'
+
+Thread.abort_on_exception = true
+
+args = {
+  :source => Dir.pwd,
+  :port => 9101,
+  :template => nil
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: sinkdown [options]'
+  opts.on('--source SOURCE') { |o| args[:source] = o }
+  opts.on('--port PORT') { |o| args[:port] = o }
+  opts.on('--template TEMPLATE') { |o| args[:template] = o }
+end.parse!
+
+args[:sinkdown_dir] = File.join args[:source], '.sinkdown'
+args[:site_dir] = File.join args[:sinkdown_dir], 'html'
+args[:template] ||= File.join(File.dirname(__FILE__), '/../lib/sinkdown/templates/document.html')
+
+site = Sinkdown::Site.new args
+site.run
+
+# vi:syntax=ruby
