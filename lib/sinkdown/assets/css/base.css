@@ -1,3 +1,51 @@
+@import '/css/base16-bright.light.css';
+
 html {
   font-family: sans-serif;
+  line-height: 1.5em;
+  color: #555;
+}
+
+a {
+  color: blue;
+}
+
+code {
+  background: #eeeeee;
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+
+.highlight {
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 5px;
+}
+
+section#index {
+  width: 800px;
+  margin: 0 auto;
+}
+
+section#index h1 {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dddddd;
+  color: #555;
+  font-size: 2em;
+}
+
+section#index ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+section#index ul li {
+  padding: 10px 5px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+section#document {
+  width: 800px;
+  margin: 0 auto;
 }

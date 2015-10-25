@@ -2,17 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SinkDown</title>
+  <title>Sinkdown</title>
+  <link href="/css/base.css" rel="stylesheet">
 </head>
 <body>
-  <section id="pages">
+  <section id="index">
+    <h1>Sinkdown</h1>
     <ul>
       {% for doc in site.documents %}
+        {% if doc.url != '/index.html' %}
         <li>
         <a href="{{ doc.url }}">{{ doc.url }}</a>
         </li>
+        {% endif %}
       {% endfor %}
     </ul>
   </section>
+  <script type="text/javascript" src="/js/app.js"></script>
 </body>
 </html>
