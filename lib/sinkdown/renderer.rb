@@ -15,9 +15,12 @@ module Sinkdown
     end
 
 
-    def render(content)
-      partial = @engine.render content
-      return @template.render 'content' => partial, 'site' => @site
+    def wrap(html)
+      return @template.render 'content' => html, 'site' => @site
+    end
+
+    def markdown_to_html(md)
+      @engine.render md
     end
 
     def render_index
@@ -30,7 +33,9 @@ module Sinkdown
     def convert(document)
       destination = File.join @site.config[:sinkdown_dir], document.url
       content = document.raw
-      full_html = render content
+      html = markdown_to_html content
+      document.html = html
+      full_html = wrap html
       dir = File.dirname destination
       unless File.directory? dir
         FileUtils.mkdir_p dir

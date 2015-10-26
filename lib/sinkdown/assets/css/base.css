@@ -41,7 +41,8 @@ section#index ul {
 }
 
 section#index ul li {
-  padding: 10px 5px;
+  padding: 8px 5px;
+  font-size: 0.8em;
   border-bottom: 1px solid #eeeeee;
 }
 

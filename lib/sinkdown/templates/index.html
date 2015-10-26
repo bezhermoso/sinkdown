@@ -12,7 +12,7 @@
       {% for doc in site.documents %}
         {% if doc.url != '/index.html' %}
         <li>
-        <a href="{{ doc.url }}">{{ doc.url }}</a>
+        <a href="{{ doc.url }}">{{ doc.title }}</a>
         </li>
         {% endif %}
       {% endfor %}
