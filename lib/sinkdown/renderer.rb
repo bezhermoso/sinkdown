@@ -14,36 +14,20 @@ module Sinkdown
       @index_template = Liquid::Template.parse(index_template_str)
     end
 
-
     def wrap(html)
       return @template.render 'content' => html, 'site' => @site
+    end
+
+    def render_document(document)
+      return @template.render 'document' => document, 'site' => @site
     end
 
     def markdown_to_html(md)
       @engine.render md
     end
 
-    def render_index
-      content = @index_template.render 'site' => @site
-      File.open(File.join(@site.config[:sinkdown_dir], 'index.html'), 'w') do |f|
-        f.write content
-      end
-    end
-
-    def convert(document)
-      destination = File.join @site.config[:sinkdown_dir], document.url
-      content = document.raw
-      html = markdown_to_html content
-      document.html = html
-      full_html = wrap html
-      dir = File.dirname destination
-      unless File.directory? dir
-        FileUtils.mkdir_p dir
-      end
-
-      File.open(destination, 'w') do |f|
-        f.write full_html
-      end
+    def render_index(index_document)
+      @index_template.render 'site' => @site, 'document' => index_document
     end
   end
 

@@ -1,3 +1,4 @@
+require 'nokogiri'
 require 'sinkdown/renderer'
 require 'sinkdown/markdown_watcher'
 require 'sinkdown/site_watcher'
@@ -19,12 +20,17 @@ module Sinkdown
     end
 
     def run
+      cleanup
       prepare
       scan_for_documents
       render_existing
       rebuild_site_index
       watch
       start_server
+    end
+
+    def cleanup
+      FileUtils.rm_rf(@config[:sinkdown_dir]) if File.directory?(@config[:sinkdown_dir])
     end
 
     def prepare
@@ -44,7 +50,35 @@ module Sinkdown
 
     def render_existing
       @documents.each do |document|
-        @renderer.convert document
+        process document
+        write document
+      end
+    end
+
+    def process(document)
+      html = @renderer.markdown_to_html document.raw
+      document.html = html
+      title = guess_title(document) || '(no title)'
+      document.title = title
+    end
+
+    def guess_title(document)
+      if document.html
+        page = Nokogiri::HTML(document.html)
+        first_header = page.at_css('h1,h2,h3')
+        if first_header
+          first_header.content
+        end
+      end
+    end
+
+    def write(document)
+      destination = File.join @config[:sinkdown_dir], document.url
+      dir = File.dirname destination
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+      full_html = @renderer.render_document document
+      File.open(destination, 'w') do |f|
+        f.write full_html
       end
     end
 
@@ -68,7 +102,10 @@ module Sinkdown
     end
 
     def rebuild_site_index
-      @renderer.render_index
+      html = @renderer.render_index @index_document
+      File.open(File.join(@config[:sinkdown_dir], 'index.html'), 'w') do |f|
+        f.write html
+      end
     end
 
     def start_server

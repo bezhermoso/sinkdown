@@ -1,7 +1,7 @@
 module Sinkdown
   class Document
     
-    attr_accessor :path, :url, :html
+    attr_accessor :path, :url, :html, :title
 
     def initialize(site, path)
       @path = path
@@ -19,21 +19,6 @@ module Sinkdown
       @url
     end
     
-    def title
-      unless @title
-        if @html
-          header = /<h[1-6]>(.*)<\/h[1-6]>$/
-          match = header.match(html)
-          if match
-            @title = match[1]
-          else
-            @title = @path
-          end
-        end
-      end
-      @title
-    end
-
     def raw
       File.read @path
     end
@@ -42,12 +27,9 @@ module Sinkdown
       {
         "path" => self.path,
         "url" => self.url,
-        "title" => self.title
+        "title" => self.title,
+        "html" => self.html
       }
-    end
-
-    def to_json
-      to_liquid
     end
   end
 end

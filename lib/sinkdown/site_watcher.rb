@@ -31,7 +31,11 @@ module Sinkdown
           url = "/#{file_path.relative_path_from(site_path)}"
           doc_event = Hash.new
           document = site.find_document_by_url url
-          doc_event[:document] = document
+          doc_event[:document] = {
+            "url" => document.url,
+            "title" => document.title,
+            "path" => document.path
+          }
           @listeners.each { |listener| listener.call doc_event }
         end
       end
