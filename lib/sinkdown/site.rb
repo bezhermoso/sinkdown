@@ -9,7 +9,7 @@ require 'sinkdown/index_document'
 module Sinkdown
   class Site
 
-    attr_accessor :config, :renderer, :watcher, :server
+    attr_accessor :config, :renderer, :watcher, :server, :documents
 
     def initialize(config)
       @config = config

@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Bez Hermoso"]
   spec.email         = ["bezalelhermoso@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Live Markdown}
+  spec.description   = %q{Live Markdown}
+  spec.homepage      = "https://github.com/bezhermoso/sinkdown"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "faye"
   spec.add_dependency "rack"
+  spec.add_dependency "simple_router"
+  spec.add_dependency "rack-cors"
   spec.add_dependency "redcarpet"
   spec.add_dependency "filewatcher"
   spec.add_dependency "thin"

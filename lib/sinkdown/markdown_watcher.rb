@@ -9,7 +9,8 @@ class MarkdownWatcher
       w.watch do |file|
         document = site.find_document_by_path file
         unless document
-          site.documents << Document.new(site, file)
+          document = Document.new(site, file)
+          site.documents << document
         end
         site.process document
         site.write document

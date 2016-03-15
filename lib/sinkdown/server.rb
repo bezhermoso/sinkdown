@@ -2,6 +2,8 @@ require 'rack'
 require 'faye'
 require 'sinkdown/middleware/reload'
 require 'sinkdown/middleware/redirect_home'
+require 'sinkdown/middleware/api'
+require 'rack/cors'
 
 module Sinkdown
   class Server
@@ -14,6 +16,9 @@ module Sinkdown
 
       app = Rack::Builder.new do
         use Sinkdown::Middleware::Reload,
+          :site => site
+
+        use Sinkdown::Middleware::Api,
           :site => site
 
         use Faye::RackAdapter,
@@ -29,6 +34,8 @@ module Sinkdown
         use Rack::Static,
           :urls => ['/css', '/js'],
           :root => File.dirname(__FILE__) + '/assets'
+
+
         run Sinkdown::Middleware::RedirectHome
       end
 
